@@ -322,3 +322,13 @@ flights_clean |>
   arrange(desc(dep_delay)) |>
   select(year, month, day, origin, dest, dep_time, dep_delay) |>
   head(10)
+# Create a folder for the data files
+dir.create("data", showWarnings = FALSE)
+
+# Export the original package tables as CSV files
+write.csv(flights, "data/flights_2013.csv", row.names = FALSE)
+write.csv(weather, "data/weather_2013.csv", row.names = FALSE)
+
+# Export the cleaned flights and weather data used in the analysis
+write.csv(flights_clean, "data/flights_clean.csv", row.names = FALSE)
+write.csv(weather_complete, "data/weather_pca_ready.csv", row.names = FALSE)
