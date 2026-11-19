@@ -298,3 +298,27 @@ ggplot(
     color = "Departure period"
   ) +
   theme_minimal()
+# Summarise departure delays after excluding missing values
+summary(flights_clean$dep_delay)
+
+# Calculate the upper outlier limit using the IQR rule
+delay_q1 <- quantile(flights_clean$dep_delay, 0.25)
+delay_q3 <- quantile(flights_clean$dep_delay, 0.75)
+delay_iqr <- IQR(flights_clean$dep_delay)
+upper_limit <- delay_q3 + 1.5 * delay_iqr
+
+# Count delays above the upper limit and show the largest delay
+sum(flights_clean$dep_delay > upper_limit)
+max(flights_clean$dep_delay)
+
+# Plot the departure delay distribution
+boxplot(
+  flights_clean$dep_delay,
+  main = "Departure delays after removing missing values",
+  ylab = "Departure delay (minutes)"
+)
+# Inspect the ten flights with the longest departure delays
+flights_clean |>
+  arrange(desc(dep_delay)) |>
+  select(year, month, day, origin, dest, dep_time, dep_delay) |>
+  head(10)
