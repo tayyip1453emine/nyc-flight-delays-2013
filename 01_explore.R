@@ -332,3 +332,16 @@ write.csv(weather, "data/weather_2013.csv", row.names = FALSE)
 # Export the cleaned flights and weather data used in the analysis
 write.csv(flights_clean, "data/flights_clean.csv", row.names = FALSE)
 write.csv(weather_complete, "data/weather_pca_ready.csv", row.names = FALSE)
+# Check the main results and data preparation conditions
+stopifnot(
+  sum(is.na(flights$dep_delay)) == 8255,
+  nrow(flights_clean) >= 3000,
+  ncol(flights_clean) >= 7,
+  all(rowSums(origin_encoded) == 1),
+  anyDuplicated(weather_scores[c("origin", "time_hour")]) == 0,
+  nrow(flight_weather) == nrow(flights_clean),
+  nrow(weather_complete) == 26110,
+  round(sum(variance_pct), 5) == 100
+)
+
+message("All validation checks passed.")
